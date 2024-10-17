@@ -1,4 +1,4 @@
-#!/bin/bash -p
+#!/usr/bin/bash -p
 #
 # Generator script for a dracut initramfs
 
@@ -25,7 +25,7 @@ unset GZIP
 
 # Verify bash version, current minimum is 4
 if ((BASH_VERSINFO[0] < 4)); then
-    printf "%s\n" "dracut[F]: dracut requires at least Bash 4." >&2
+    printf -- 'You need at least Bash 4 to use dracut, sorry.' >&2
     exit 1
 fi
 
@@ -79,69 +79,53 @@ Creates initial ramdisk images for preloading modules
 
   --kver [VERSION]      Set kernel version to [VERSION].
   -f, --force           Overwrite existing initramfs file.
-  [OUTPUT_FILE] --rebuild
-                        Append the current arguments to those with which the
-                         input initramfs image was built. This option helps in
-                         incrementally building the initramfs for testing.
-                         If optional [OUTPUT_FILE] is not provided, the input
-                         initramfs provided to rebuild will be used as output
-                         file.
   -a, --add [LIST]      Add a space-separated list of dracut modules.
-  --force-add [LIST]    Force to add a space-separated list of dracut modules
-                         to the default set of modules, when -H is specified.
-  -o, --omit [LIST]     Omit a space-separated list of dracut modules.
+  --rebuild         Append arguments to those of existing image and rebuild
   -m, --modules [LIST]  Specify a space-separated list of dracut modules to
                          call when building the initramfs. Modules are located
                          in /usr/lib/dracut/modules.d.
-                         This option forces dracut to only include the specified
-                         dracut modules.
-                         In most cases the --add option is what you want to use.
+  -o, --omit [LIST]     Omit a space-separated list of dracut modules.
+  --force-add [LIST]    Force to add a space-separated list of dracut modules
+                         to the default set of modules, when -H is specified.
+  -d, --drivers [LIST]  Specify a space-separated list of kernel modules to
+                         exclusively include in the initramfs.
   --add-drivers [LIST]  Specify a space-separated list of kernel
                          modules to add to the initramfs.
-  --force-drivers [LIST]
-                        Specify a space-separated list of kernel
+  --force-drivers [LIST] Specify a space-separated list of kernel
                          modules to add to the initramfs and make sure they
                          are tried to be loaded via modprobe same as passing
                          rd.driver.pre=DRIVER kernel parameter.
   --omit-drivers [LIST] Specify a space-separated list of kernel
                          modules not to add to the initramfs.
-  -d, --drivers [LIST]  Specify a space-separated list of kernel modules to
-                         exclusively include in the initramfs.
   --filesystems [LIST]  Specify a space-separated list of kernel filesystem
                          modules to exclusively include in the generic
                          initramfs.
-  -k, --kmoddir [DIR]   Specify the directory where to look for kernel
-                         modules.
-  --fwdir [DIR]         Specify additional colon-separated list of directories
-                         where to look for firmware files.
-  --libdirs [LIST]      Specify a space-separated list of directories
-                         where to look for libraries.
-  --kernel-only         Only install kernel drivers and firmware files.
-  --no-kernel           Do not install kernel drivers and firmware files.
-  --print-cmdline       Print the kernel command line for the given disk layout.
-  --early-microcode     Combine early microcode with ramdisk.
-  --no-early-microcode  Do not combine early microcode with ramdisk.
-  --kernel-cmdline [PARAMETERS]
-                        Specify default kernel command line parameters.
-  --strip               Strip binaries in the initramfs.
-  --aggressive-strip     Strip more than just debug symbol and sections,
-                         for a smaller initramfs build. The --strip option must
-                         also be specified.
-  --nostrip             Do not strip binaries in the initramfs.
-  --hardlink            Hardlink files in the initramfs.
-  --nohardlink          Do not hardlink files in the initramfs.
-  --prefix [DIR]        Prefix initramfs files with [DIR].
-  --noprefix            Do not prefix initramfs files.
-  --mdadmconf           Include local /etc/mdadm.conf file.
-  --nomdadmconf         Do not include local /etc/mdadm.conf file.
-  --lvmconf             Include local /etc/lvm/lvm.conf file.
-  --nolvmconf           Do not include local /etc/lvm/lvm.conf file.
+  -k, --kmoddir [DIR]   Specify the directory, where to look for kernel
+                         modules
+  --fwdir [DIR]         Specify additional directories, where to look for
+                         firmwares, separated by :
+  --kernel-only         Only install kernel drivers and firmware files
+  --no-kernel           Do not install kernel drivers and firmware files
+  --print-cmdline       Print the kernel command line for the given disk layout
+  --early-microcode     Combine early microcode with ramdisk
+  --no-early-microcode  Do not combine early microcode with ramdisk
+  --kernel-cmdline [PARAMETERS] Specify default kernel command line parameters
+  --strip               Strip binaries in the initramfs
+  --nostrip             Do not strip binaries in the initramfs
+  --hardlink            Hardlink files in the initramfs
+  --nohardlink          Do not hardlink files in the initramfs
+  --prefix [DIR]        Prefix initramfs files with [DIR]
+  --noprefix            Do not prefix initramfs files
+  --mdadmconf           Include local /etc/mdadm.conf
+  --nomdadmconf         Do not include local /etc/mdadm.conf
+  --lvmconf             Include local /etc/lvm/lvm.conf
+  --nolvmconf           Do not include local /etc/lvm/lvm.conf
   --fscks [LIST]        Add a space-separated list of fsck helpers.
   --nofscks             Inhibit installation of any fsck helpers.
   --ro-mnt              Mount / and /usr read-only by default.
-  -h, --help            This message.
-  --debug               Output debug information of the build process.
-  --profile             Output profile information of the build process.
+  -h, --help            This message
+  --debug               Output debug information of the build process
+  --profile             Output profile information of the build process
   -L, --stdlog [0-6]    Specify logging level (to standard error)
                          0 - suppress any messages
                          1 - only fatal errors
@@ -150,8 +134,8 @@ Creates initial ramdisk images for preloading modules
                          4 - info
                          5 - debug info (here starts lots of output)
                          6 - trace info (and even more)
-  -v, --verbose         Increase verbosity level.
-  -q, --quiet           Decrease verbosity level.
+  -v, --verbose         Increase verbosity level
+  -q, --quiet           Decrease verbosity level
   -c, --conf [FILE]     Specify configuration file to use.
                          Default: /etc/dracut.conf
   --confdir [DIR]       Specify configuration directory to use *.conf files
@@ -163,52 +147,49 @@ Creates initial ramdisk images for preloading modules
                          directory instead of the system-wide installed in
                          /usr/lib/dracut/modules.d.
                          Useful when running dracut from a git checkout.
-  -H, --hostonly        Host-only mode: Install only what is needed for
-                         booting the local host instead of a generic host.
-  -N, --no-hostonly     Disables host-only mode.
-  --hostonly-mode [MODE]
-                        Specify the host-only mode to use. [MODE] could be
-                         one of "sloppy" or "strict". "sloppy" mode is used
-                         by default.
-                         In "sloppy" host-only mode, extra drivers and modules
-                         will be installed, so minor hardware change won't make
-                         the image unbootable (e.g. changed keyboard), and the
-                         image is still portable among similar hosts.
-                         With "strict" mode enabled, anything not necessary
-                         for booting the local host in its current state will
-                         not be included, and modules may do some extra job
-                         to save more space. Minor change of hardware or
-                         environment could make the image unbootable.
-                         DO NOT use "strict" mode unless you know what you
-                         are doing.
+  -H, --hostonly        Host-Only mode: Install only what is needed for
+                        booting the local host instead of a generic host.
+  -N, --no-hostonly     Disables Host-Only mode
+  --hostonly-mode <mode>
+                        Specify the hostonly mode to use. <mode> could be
+                        one of "sloppy" or "strict". "sloppy" mode is used
+                        by default.
+                        In "sloppy" hostonly mode, extra drivers and modules
+                        will be installed, so minor hardware change won't make
+                        the image unbootable (eg. changed keyboard), and the
+                        image is still portable among similar hosts.
+                        With "strict" mode enabled, anything not necessary
+                        for booting the local host in its current state will
+                        not be included, and modules may do some extra job
+                        to save more space. Minor change of hardware or
+                        environment could make the image unbootable.
+                        DO NOT use "strict" mode unless you know what you
+                        are doing.
   --hostonly-cmdline    Store kernel command line arguments needed
-                         in the initramfs.
+                        in the initramfs
   --no-hostonly-cmdline Do not store kernel command line arguments needed
-                         in the initramfs.
+                        in the initramfs
   --no-hostonly-default-device
                         Do not generate implicit host devices like root,
-                         swap, fstab, etc. Use "--mount" or "--add-device"
-                         to explicitly add devices as needed.
+                        swap, fstab, etc. Use "--mount" or "--add-device"
+                        to explicitly add devices as needed.
   --hostonly-i18n       Install only needed keyboard and font files according
-                         to the host configuration (default).
+                        to the host configuration (default).
   --no-hostonly-i18n    Install all keyboard and font files available.
   --hostonly-nics [LIST]
-                        Only enable listed NICs in the initramfs. The list can
-                         be empty, so other modules can install only the
-                         necessary network drivers.
+                        Only enable listed NICs in the initramfs.
   --persistent-policy [POLICY]
                         Use [POLICY] to address disks and partitions.
-                         POLICY can be any directory name found in /dev/disk
-                         (e.g. "by-uuid", "by-label"), or "mapper" to use
-                         /dev/mapper device names (default).
+                        POLICY can be any directory name found in /dev/disk.
+                        E.g. "by-uuid", "by-label"
   --fstab               Use /etc/fstab to determine the root device.
-  --add-fstab [FILE]    Add file to the initramfs fstab.
+  --add-fstab [FILE]    Add file to the initramfs fstab
   --mount "[DEV] [MP] [FSTYPE] [FSOPTS]"
                         Mount device [DEV] on mountpoint [MP] with filesystem
-                         [FSTYPE] and options [FSOPTS] in the initramfs.
+                        [FSTYPE] and options [FSOPTS] in the initramfs
   --mount "[MP]"        Same as above, but [DEV], [FSTYPE] and [FSOPTS] are
-                         determined by looking at the current mounts.
-  --add-device "[DEV]"  Bring up [DEV] in initramfs.
+                        determined by looking at the current mounts.
+  --add-device "[DEV]"  Bring up [DEV] in initramfs
   -i, --include [SOURCE] [TARGET]
                         Include the files in the SOURCE directory into the
                          Target directory in the final initramfs.
@@ -216,8 +197,7 @@ Creates initial ramdisk images for preloading modules
                          in the final initramfs.
   -I, --install [LIST]  Install the space separated list of files into the
                          initramfs.
-  --install-optional [LIST]
-                        Install the space separated list of files into the
+  --install-optional [LIST]  Install the space separated list of files into the
                          initramfs, if they exist.
   --gzip                Compress the generated initramfs using gzip.
                          This will be done by default, unless another
@@ -240,48 +220,33 @@ Creates initial ramdisk images for preloading modules
   --zstd                Compress the generated initramfs using Zstandard.
                          Make sure that your kernel has zstd support compiled
                          in, otherwise you will not be able to boot.
-  --compress [COMPRESSION]
-                        Compress the generated initramfs with the
+  --compress [COMPRESSION] Compress the generated initramfs with the
                          passed compression program.  Make sure your kernel
                          knows how to decompress the generated initramfs,
                          otherwise you will not be able to boot.
-  --no-compress         Do not compress the generated initramfs. This will
+  --no-compress         Do not compress the generated initramfs.  This will
                          override any other compression options.
-  --squash-compressor [COMPRESSION]
-                        Specify the compressor and compressor specific options
-                         used by mksquashfs if squash module is called when
-                         building the initramfs.
-  --enhanced-cpio       Attempt to reflink cpio file data using dracut-cpio.
   --list-modules        List all available dracut modules.
   -M, --show-modules    Print included module's name to standard output during
                          build.
-  --keep                Keep the temporary initramfs for debugging purposes.
-  --printsize           Print out the module install size.
-  --sshkey [SSHKEY]     Add SSH key to initramfs (use with ssh-client module).
-  --logfile [FILE]      Logfile to use (overrides configuration setting).
-  --reproducible        Create reproducible images.
-  --no-reproducible     Do not create reproducible images.
-  --loginstall [DIR]    Log all files installed from the host to [DIR].
+  --keep                Keep the temporary initramfs for debugging purposes
+  --printsize           Print out the module install size
+  --sshkey [SSHKEY]     Add ssh key to initramfs (use with ssh-client module)
+  --logfile [FILE]      Logfile to use (overrides configuration setting)
+  --reproducible        Create reproducible images
+  --no-reproducible     Do not create reproducible images
+  --loginstall [DIR]    Log all files installed from the host to [DIR]
   --uefi                Create an UEFI executable with the kernel cmdline and
-                         kernel combined.
-  --no-uefi             Disables UEFI mode.
-  --no-machineid        Affects the default output filename of the UEFI
-                         executable, discarding the <MACHINE_ID> part.
-  --uefi-stub [FILE]    Use the UEFI stub [FILE] to create an UEFI executable.
+                        kernel combined
+  --no-uefi             Disables UEFI mode
+  --uefi-stub [FILE]    Use the UEFI stub [FILE] to create an UEFI executable
   --uefi-splash-image [FILE]
                         Use [FILE] as a splash image when creating an UEFI
-                         executable. Requires bitmap (.bmp) image format.
-  --kernel-image [FILE] Location of the kernel image.
-  --sbat [PARAMETERS]   The SBAT parameters to be added to .sbat.
-                         The string "sbat,1,SBAT Version,sbat,1,
-                         https://github.com/rhboot/shim/blob/main/SBAT.md" is
-                         already added by default.
+                        executable
+  --kernel-image [FILE] location of the kernel image
   --regenerate-all      Regenerate all initramfs images at the default location
-                         for the kernel versions found on the system.
-  -p, --parallel        Use parallel processing if possible (currently only
-                        supported --regenerate-all)
-                        images simultaneously.
-  --version             Display version.
+                        for the kernel versions found on the system
+  --version             Display version
 
 If [LIST] has multiple arguments, then you have to put these in quotes.
 
@@ -330,8 +295,8 @@ read_arg() {
 
 check_conf_file() {
     if grep -H -e '^[^#]*[+]=\("[^ ]\|.*[^ ]"\)' "$@"; then
-        printf '\ndracut[W]: <key>+=" <values> ": <values> should have surrounding white spaces!\n' >&2
-        printf 'dracut[W]: This will lead to unwanted side effects! Please fix the configuration file.\n\n' >&2
+        printf '\ndracut: WARNING: <key>+=" <values> ": <values> should have surrounding white spaces!\n' >&2
+        printf 'dracut: WARNING: This will lead to unwanted side effects! Please fix the configuration file.\n\n' >&2
     fi
 }
 
@@ -376,7 +341,7 @@ rearrange_params() {
     TEMP=$(
         unset POSIXLY_CORRECT
         getopt \
-            -o "a:m:o:d:I:k:c:r:L:fvqlHhMNp" \
+            -o "a:m:o:d:I:k:c:r:L:fvqlHhMN" \
             --long kver: \
             --long add: \
             --long force-add: \
@@ -405,7 +370,6 @@ rearrange_params() {
             --long sysroot: \
             --long stdlog: \
             --long compress: \
-            --long squash-compressor: \
             --long prefix: \
             --long rebuild: \
             --long force \
@@ -414,7 +378,6 @@ rearrange_params() {
             --long print-cmdline \
             --long kernel-cmdline: \
             --long strip \
-            --long aggressive-strip \
             --long nostrip \
             --long hardlink \
             --long nohardlink \
@@ -449,13 +412,11 @@ rearrange_params() {
             --long zstd \
             --long no-compress \
             --long gzip \
-            --long enhanced-cpio \
             --long list-modules \
             --long show-modules \
             --long keep \
             --long printsize \
             --long regenerate-all \
-            --long parallel \
             --long noimageifnotneeded \
             --long early-microcode \
             --long no-early-microcode \
@@ -467,7 +428,6 @@ rearrange_params() {
             --long uefi-stub: \
             --long uefi-splash-image: \
             --long kernel-image: \
-            --long sbat: \
             --long no-hostonly-i18n \
             --long hostonly-i18n \
             --long hostonly-nics: \
@@ -697,11 +657,6 @@ while :; do
             PARMS_TO_STORE+=" '$2'"
             shift
             ;;
-        --squash-compressor)
-            squash_compress_l="$2"
-            PARMS_TO_STORE+=" '$2'"
-            shift
-            ;;
         --prefix)
             prefix_l="$2"
             PARMS_TO_STORE+=" '$2'"
@@ -740,7 +695,6 @@ while :; do
             early_microcode_l="no"
             ;;
         --strip) do_strip_l="yes" ;;
-        --aggressive-strip) aggressive_strip_l="yes" ;;
         --nostrip) do_strip_l="no" ;;
         --hardlink) do_hardlink_l="yes" ;;
         --nohardlink) do_hardlink_l="no" ;;
@@ -806,25 +760,23 @@ while :; do
         --fstab) use_fstab_l="yes" ;;
         -h | --help)
             long_usage
-            exit 0
+            exit 1
             ;;
         --bzip2) compress_l="bzip2" ;;
         --lzma) compress_l="lzma" ;;
         --xz) compress_l="xz" ;;
-        --lzo) compress_l="lzop" ;;
+        --lzo) compress_l="lzo" ;;
         --lz4) compress_l="lz4" ;;
         --zstd) compress_l="zstd" ;;
         --no-compress) _no_compress_l="cat" ;;
         --gzip) compress_l="gzip" ;;
-        --enhanced-cpio) enhanced_cpio_l="yes" ;;
         --list-modules) do_list="yes" ;;
         -M | --show-modules)
             show_modules_l="yes"
             ;;
         --keep) keep="yes" ;;
         --printsize) printsize="yes" ;;
-        --regenerate-all) regenerate_all_l="yes" ;;
-        -p | --parallel) parallel_l="yes" ;;
+        --regenerate-all) regenerate_all="yes" ;;
         --noimageifnotneeded) noimageifnotneeded="yes" ;;
         --reproducible) reproducible_l="yes" ;;
         --no-reproducible) reproducible_l="no" ;;
@@ -845,17 +797,12 @@ while :; do
             PARMS_TO_STORE+=" '$2'"
             shift
             ;;
-        --sbat)
-            sbat_l="$2"
-            PARMS_TO_STORE+=" '$2'"
-            shift
-            ;;
         --no-machineid)
             machine_id_l="no"
             ;;
         --version)
             long_version
-            exit 0
+            exit 1
             ;;
         --)
             shift
@@ -886,6 +833,37 @@ done
 
 [[ $sysroot_l ]] && dracutsysrootdir="$sysroot_l"
 
+if [[ $regenerate_all == "yes" ]]; then
+    ret=0
+    if [[ $kernel ]]; then
+        printf -- "--regenerate-all cannot be called with a kernel version\n" >&2
+        exit 1
+    fi
+
+    if [[ $outfile ]]; then
+        printf -- "--regenerate-all cannot be called with a image file\n" >&2
+        exit 1
+    fi
+
+    ((len = ${#dracut_args[@]}))
+    for ((i = 0; i < len; i++)); do
+        [[ ${dracut_args[$i]} == "--regenerate-all" ]] \
+            && unset dracut_args["$i"]
+    done
+
+    cd "$dracutsysrootdir"/lib/modules || exit 1
+    for i in *; do
+        [[ -f $i/modules.dep ]] || [[ -f $i/modules.dep.bin ]] || continue
+        "$dracut_cmd" --kver="$i" "${dracut_args[@]}"
+        ((ret += $?))
+    done
+    exit "$ret"
+fi
+
+if ! [[ $kernel ]]; then
+    kernel=$(uname -r)
+fi
+
 export LC_ALL=C
 export LANG=C
 unset LC_MESSAGES
@@ -897,7 +875,7 @@ unset GREP_OPTIONS
 export DRACUT_LOG_LEVEL=warning
 [[ $debug ]] && {
     export DRACUT_LOG_LEVEL=debug
-    export PS4='${BASH_SOURCE}@${LINENO}(${FUNCNAME[0]-}): '
+    export PS4='${BASH_SOURCE}@${LINENO}(${FUNCNAME[0]}): '
     set -x
 }
 
@@ -910,26 +888,20 @@ export DRACUT_LOG_LEVEL=warning
 [[ $dracutbasedir ]] || dracutbasedir="$dracutsysrootdir"/usr/lib/dracut
 
 # if we were not passed a config file, try the default one
-if [[ -z $conffile ]]; then
+if [[ ! -f $conffile ]]; then
     if [[ $allowlocal ]]; then
         conffile="$dracutbasedir/dracut.conf"
     else
         conffile="$dracutsysrootdir/etc/dracut.conf"
     fi
-elif [[ ! -e $conffile ]]; then
-    printf "%s\n" "dracut[F]: Configuration file '$conffile' not found." >&2
-    exit 1
 fi
 
-if [[ -z $confdir ]]; then
+if [[ ! -d $confdir ]]; then
     if [[ $allowlocal ]]; then
         confdir="$dracutbasedir/dracut.conf.d"
     else
         confdir="$dracutsysrootdir/etc/dracut.conf.d"
     fi
-elif [[ ! -d $confdir ]]; then
-    printf "%s\n" "dracut[F]: Configuration directory '$confdir' not found." >&2
-    exit 1
 fi
 
 # source our config file
@@ -946,63 +918,6 @@ for f in $(dropindirs_sort ".conf" "$confdir" "$dracutbasedir/dracut.conf.d"); d
     [[ -e $f ]] && . "$f"
 done
 
-# regenerate_all shouldn't be set in conf files
-regenerate_all=$regenerate_all_l
-if [[ $parallel_l == "yes" ]]; then
-    parallel=yes
-fi
-
-if [[ $regenerate_all == "yes" ]]; then
-    ret=0
-    if [[ $kernel ]]; then
-        printf "%s\n" "dracut[F]: --regenerate-all cannot be called with a kernel version." >&2
-        exit 1
-    fi
-
-    if [[ $outfile ]]; then
-        printf "%s\n" "dracut[F]: --regenerate-all cannot be called with an image file." >&2
-        exit 1
-    fi
-
-    ((len = ${#dracut_args[@]}))
-    for ((i = 0; i < len; i++)); do
-        case ${dracut_args[$i]} in
-            --regenerate-all | --parallel)
-                # shellcheck disable=SC2184
-                unset dracut_args["$i"]
-                ;;
-        esac
-    done
-
-    cd "$dracutsysrootdir"/lib/modules || exit 1
-    if [[ $parallel != "yes" ]]; then
-        for i in *; do
-            [[ -f $i/modules.dep ]] || [[ -f $i/modules.dep.bin ]] || continue
-            "$dracut_cmd" --kver="$i" "${dracut_args[@]}"
-            ((ret += $?))
-        done
-    else
-        for i in *; do
-            [[ -f $i/modules.dep ]] || [[ -f $i/modules.dep.bin ]] || continue
-            "$dracut_cmd" --kver="$i" "${dracut_args[@]}" &
-        done
-        while true; do
-            wait -n
-            wst=$?
-            if [[ $wst == 127 ]]; then
-                break
-            else
-                ((ret += wst))
-            fi
-        done
-    fi
-    exit "$ret"
-fi
-
-if ! [[ $kernel ]]; then
-    kernel=$(uname -r)
-fi
-
 DRACUT_PATH=${DRACUT_PATH:-/sbin /bin /usr/sbin /usr/bin}
 
 for i in $DRACUT_PATH; do
@@ -1010,7 +925,7 @@ for i in $DRACUT_PATH; do
     if [ -L "$dracutsysrootdir$i" ]; then
         rl=$(readlink -f "$dracutsysrootdir$i")
     fi
-    rl="${rl#"$dracutsysrootdir"}"
+    rl="${rl#$dracutsysrootdir}"
     if [[ $NPATH != *:$rl* ]]; then
         NPATH+=":$rl"
     fi
@@ -1043,10 +958,8 @@ stdloglvl=$((stdloglvl + verbosity_mod_l))
 ((stdloglvl < 0)) && stdloglvl=0
 
 [[ $drivers_dir_l ]] && drivers_dir=$drivers_dir_l
-drivers_dir="${drivers_dir%"${drivers_dir##*[!/]}"}"
 [[ $do_strip_l ]] && do_strip=$do_strip_l
 [[ $do_strip ]] || do_strip=yes
-[[ $aggressive_strip_l ]] && aggressive_strip=$aggressive_strip_l
 [[ $do_hardlink_l ]] && do_hardlink=$do_hardlink_l
 [[ $do_hardlink ]] || do_hardlink=yes
 [[ $prefix_l ]] && prefix=$prefix_l
@@ -1063,17 +976,12 @@ drivers_dir="${drivers_dir%"${drivers_dir##*[!/]}"}"
 [[ $mdadmconf_l ]] && mdadmconf=$mdadmconf_l
 [[ $lvmconf_l ]] && lvmconf=$lvmconf_l
 [[ $dracutbasedir ]] || dracutbasedir="$dracutsysrootdir"/usr/lib/dracut
-[[ $fw_dir ]] || {
-    fw_path_para=$(< /sys/module/firmware_class/parameters/path)
-    fw_dir="${fw_path_para:+$dracutsysrootdir$fw_path_para:}$dracutsysrootdir/lib/firmware/updates/$kernel:$dracutsysrootdir/lib/firmware/updates:$dracutsysrootdir/lib/firmware/$kernel:$dracutsysrootdir/lib/firmware"
-}
+[[ $fw_dir ]] || fw_dir="$dracutsysrootdir/lib/firmware/updates:$dracutsysrootdir/lib/firmware:$dracutsysrootdir/lib/firmware/$kernel"
 [[ $tmpdir_l ]] && tmpdir="$tmpdir_l"
 [[ $tmpdir ]] || tmpdir="$TMPDIR"
 [[ $tmpdir ]] || tmpdir="$dracutsysrootdir"/var/tmp
 [[ $INITRD_COMPRESS ]] && compress=$INITRD_COMPRESS
 [[ $compress_l ]] && compress=$compress_l
-[[ $squash_compress_l ]] && squash_compress=$squash_compress_l
-[[ $enhanced_cpio_l ]] && enhanced_cpio=$enhanced_cpio_l
 [[ $show_modules_l ]] && show_modules=$show_modules_l
 [[ $nofscks_l ]] && nofscks="yes"
 [[ $ro_mnt_l ]] && ro_mnt="yes"
@@ -1089,31 +997,22 @@ drivers_dir="${drivers_dir%"${drivers_dir##*[!/]}"}"
 [[ $uefi_stub_l ]] && uefi_stub="$uefi_stub_l"
 [[ $uefi_splash_image_l ]] && uefi_splash_image="$uefi_splash_image_l"
 [[ $kernel_image_l ]] && kernel_image="$kernel_image_l"
-[[ $sbat_l ]] && sbat="$sbat_l"
 [[ $machine_id_l ]] && machine_id="$machine_id_l"
 
 if ! [[ $outfile ]]; then
     if [[ $machine_id != "no" ]]; then
-        if [[ -d "$dracutsysrootdir"/efi/Default ]] \
-            || [[ -d "$dracutsysrootdir"/boot/Default ]] \
-            || [[ -d "$dracutsysrootdir"/boot/efi/Default ]]; then
-            MACHINE_ID="Default"
-        elif [[ -s "$dracutsysrootdir"/etc/machine-id ]]; then
-            read -r MACHINE_ID < "$dracutsysrootdir"/etc/machine-id
-            [[ $MACHINE_ID == "uninitialized" ]] && MACHINE_ID="Default"
-        else
-            MACHINE_ID="Default"
-        fi
+        [[ -f "$dracutsysrootdir"/etc/machine-id ]] && read -r MACHINE_ID < "$dracutsysrootdir"/etc/machine-id
     fi
 
     if [[ $uefi == "yes" ]]; then
+        # shellcheck disable=SC2154
         if [[ -n $uefi_secureboot_key && -z $uefi_secureboot_cert ]] || [[ -z $uefi_secureboot_key && -n $uefi_secureboot_cert ]]; then
-            printf "%s\n" "dracut[F]: Need 'uefi_secureboot_key' and 'uefi_secureboot_cert' both to be set." >&2
+            dfatal "Need 'uefi_secureboot_key' and 'uefi_secureboot_cert' both to be set."
             exit 1
         fi
 
         if [[ -n $uefi_secureboot_key && -n $uefi_secureboot_cert ]] && ! command -v sbsign &> /dev/null; then
-            printf "%s\n" "dracut[F]: Need 'sbsign' to create a signed UEFI executable." >&2
+            dfatal "Need 'sbsign' to create a signed UEFI executable"
             exit 1
         fi
 
@@ -1126,7 +1025,7 @@ if ! [[ $outfile ]]; then
                 efidir=/efi/EFI
             else
                 efidir=/boot/EFI
-                if [[ -d /boot/efi/EFI ]]; then
+                if [[ -d $dracutsysrootdir/boot/efi/EFI ]]; then
                     efidir=/boot/efi/EFI
                 fi
             fi
@@ -1139,32 +1038,12 @@ if ! [[ $outfile ]]; then
         mkdir -p "$dracutsysrootdir$efidir/Linux"
         outfile="$dracutsysrootdir$efidir/Linux/linux-$kernel${MACHINE_ID:+-${MACHINE_ID}}${BUILD_ID:+-${BUILD_ID}}.efi"
     else
-        if [[ -d "$dracutsysrootdir"/efi/loader/entries || -L "$dracutsysrootdir"/efi/loader/entries ]] \
-            && [[ $MACHINE_ID ]] \
-            && [[ -d "$dracutsysrootdir"/efi/${MACHINE_ID} || -L "$dracutsysrootdir"/efi/${MACHINE_ID} ]]; then
-            outfile="$dracutsysrootdir/efi/${MACHINE_ID}/${kernel}/initrd"
-        elif [[ -d "$dracutsysrootdir"/boot/loader/entries || -L "$dracutsysrootdir"/boot/loader/entries ]] \
-            && [[ $MACHINE_ID ]] \
-            && [[ -d "$dracutsysrootdir"/boot/${MACHINE_ID} || -L "$dracutsysrootdir"/boot/${MACHINE_ID} ]]; then
-            outfile="$dracutsysrootdir/boot/${MACHINE_ID}/${kernel}/initrd"
-        elif [[ -d "$dracutsysrootdir"/boot/efi/loader/entries || -L "$dracutsysrootdir"/boot/efi/loader/entries ]] \
-            && [[ $MACHINE_ID ]] \
-            && [[ -d "$dracutsysrootdir"/boot/efi/${MACHINE_ID} || -L "$dracutsysrootdir"/boot/efi/${MACHINE_ID} ]]; then
-            outfile="$dracutsysrootdir/boot/efi/${MACHINE_ID}/${kernel}/initrd"
-        elif [[ -f "$dracutsysrootdir"/lib/modules/${kernel}/initrd ]]; then
-            outfile="$dracutsysrootdir/lib/modules/${kernel}/initrd"
-        elif [[ -e $dracutsysrootdir/boot/vmlinuz-${kernel} ]]; then
-            outfile="$dracutsysrootdir/boot/initramfs-${kernel}.img"
-        elif [[ -z $dracutsysrootdir ]] \
-            && [[ $MACHINE_ID ]] \
-            && mountpoint -q /efi; then
-            outfile="/efi/${MACHINE_ID}/${kernel}/initrd"
-        elif [[ -z $dracutsysrootdir ]] \
-            && [[ $MACHINE_ID ]] \
-            && mountpoint -q /boot/efi; then
-            outfile="/boot/efi/${MACHINE_ID}/${kernel}/initrd"
+        if [[ -e $dracutsysrootdir/boot/vmlinuz-$kernel ]]; then
+            outfile="/boot/initramfs-$kernel.img"
+        elif [[ $MACHINE_ID ]] && { [[ -d $dracutsysrootdir/boot/${MACHINE_ID} ]] || [[ -L $dracutsysrootdir/boot/${MACHINE_ID} ]]; }; then
+            outfile="$dracutsysrootdir/boot/${MACHINE_ID}/$kernel/initrd"
         else
-            outfile="$dracutsysrootdir/boot/initramfs-${kernel}.img"
+            outfile="$dracutsysrootdir/boot/initramfs-$kernel.img"
         fi
     fi
 fi
@@ -1177,7 +1056,7 @@ fw_dir=${fw_dir//:/ }
 if [[ -n $logfile ]]; then
     if [[ ! -f $logfile ]]; then
         if touch "$logfile"; then
-            printf "%s\n" "dracut[W]: touch $logfile failed." >&2
+            printf "%s\n" "dracut: touch $logfile failed." >&2
         fi
     fi
 fi
@@ -1211,49 +1090,44 @@ case $hostonly_mode in
         fi
         ;;
     *)
-        printf "%s\n" "dracut[F]: Invalid hostonly mode '$hostonly_mode'." >&2
+        printf "%s\n" "dracut: Invalid hostonly mode '$hostonly_mode'." >&2
         exit 1
         ;;
 esac
 
 [[ $reproducible == yes ]] && DRACUT_REPRODUCIBLE=1
 
-if [[ -z $DRACUT_KMODDIR_OVERRIDE && -n $drivers_dir ]]; then
-    drivers_basename="${drivers_dir##*/}"
-    if [[ -n $drivers_basename && $drivers_basename != "$kernel" ]]; then
-        printf "%s\n" "dracut[F]: The provided directory where to look for kernel modules ($drivers_basename)" >&2
-        printf "%s\n" "dracut[F]: does not match the kernel version set for the initramfs ($kernel)." >&2
-        printf "%s\n" "dracut[F]: Set DRACUT_KMODDIR_OVERRIDE=1 to ignore this check." >&2
-        exit 1
-    fi
-    drivers_dirname="${drivers_dir%/*}/"
-    if [[ ! $drivers_dirname =~ .*/lib/modules/$ ]]; then
-        printf "%s\n" "dracut[F]: drivers_dir path ${drivers_dir_l:+"set via -k/--kmoddir "}must contain \"/lib/modules/\" as a parent of your kernel module directory," >&2
-        printf "%s\n" "dracut[F]: or modules may not be placed in the correct location inside the initramfs." >&2
-        printf "%s\n" "dracut[F]: was given: ${drivers_dir}" >&2
-        printf "%s\n" "dracut[F]: expected: ${drivers_dirname}lib/modules/${kernel}" >&2
-        printf "%s\n" "dracut[F]: Please move your modules into the correct directory structure and pass the new location," >&2
-        printf "%s\n" "dracut[F]: or set DRACUT_KMODDIR_OVERRIDE=1 to ignore this check." >&2
-        exit 1
-    fi
-fi
+case "${drivers_dir}" in
+    '' | *lib/modules/${kernel} | *lib/modules/${kernel}/) ;;
+    *)
+        [[ "$DRACUT_KMODDIR_OVERRIDE" ]] || {
+            printf "%s\n" 'dracut: -k/--kmoddir path must contain "lib/modules" as a parent of your kernel module directory,'
+            printf "%s\n" "dracut: or modules may not be placed in the correct location inside the initramfs."
+            printf "%s\n" "dracut: was given: ${drivers_dir}"
+            printf "%s\n" "dracut: expected: $(dirname "${drivers_dir}")/lib/modules/${kernel}"
+            printf "%s\n" "dracut: Please move your modules into the correct directory structure and pass the new location,"
+            printf "%s\n" "dracut: or set DRACUT_KMODDIR_OVERRIDE=1 to ignore this check."
+            exit 1
+        }
+        ;;
+esac
 
 # shellcheck disable=SC2155
 readonly TMPDIR="$(realpath -e "$tmpdir")"
 [ -d "$TMPDIR" ] || {
-    printf "%s\n" "dracut[F]: Invalid tmpdir '$tmpdir'." >&2
+    printf "%s\n" "dracut: Invalid tmpdir '$tmpdir'." >&2
     exit 1
 }
 
 if findmnt --raw -n --target "$tmpdir" --output=options | grep -q noexec; then
-    [[ $debug == yes ]] && printf "%s\n" "dracut[D]: Tmpdir '$tmpdir' is mounted with 'noexec'." >&2
+    [[ $debug == yes ]] && printf "%s\n" "dracut: Tmpdir '$tmpdir' is mounted with 'noexec'."
     noexec=1
 fi
 
 # shellcheck disable=SC2155
 readonly DRACUT_TMPDIR="$(mktemp -p "$TMPDIR/" -d -t dracut.XXXXXX)"
 [ -d "$DRACUT_TMPDIR" ] || {
-    printf "%s\n" "dracut[F]: mktemp -p '$TMPDIR/' -d -t dracut.XXXXXX failed." >&2
+    printf "%s\n" "dracut: mktemp -p '$TMPDIR/' -d -t dracut.XXXXXX failed." >&2
     exit 1
 }
 
@@ -1277,6 +1151,7 @@ trap 'exit 1;' SIGINT
 readonly initdir="${DRACUT_TMPDIR}/initramfs"
 mkdir -p "$initdir"
 
+# shellcheck disable=SC2154
 if [[ $early_microcode == yes ]] || { [[ $acpi_override == yes ]] && [[ -d $acpi_table_dir ]]; }; then
     readonly early_cpio_dir="${DRACUT_TMPDIR}/earlycpio"
     mkdir "$early_cpio_dir"
@@ -1299,7 +1174,7 @@ fi
 if systemd-detect-virt -c &> /dev/null; then
     export DRACUT_NO_MKNOD=1 DRACUT_NO_XATTR=1
     if [[ $hostonly ]]; then
-        printf "%s\n" "dracut[W]: Running in hostonly mode in a container!" >&2
+        printf "%s\n" "dracut: WARNING: running in hostonly mode in a container!!"
     fi
 fi
 
@@ -1307,35 +1182,16 @@ if [[ -f $dracutbasedir/dracut-init.sh ]]; then
     # shellcheck source=./dracut-init.sh
     . "$dracutbasedir"/dracut-init.sh
 else
-    printf "%s\n" "dracut[F]: Cannot find $dracutbasedir/dracut-init.sh." >&2
-    printf "%s\n" "dracut[F]: Are you running from a git checkout?" >&2
-    printf "%s\n" "dracut[F]: Try passing -l as an argument to $dracut_cmd" >&2
+    printf "%s\n" "dracut: Cannot find $dracutbasedir/dracut-init.sh." >&2
+    printf "%s\n" "dracut: Are you running from a git checkout?" >&2
+    printf "%s\n" "dracut: Try passing -l as an argument to $dracut_cmd" >&2
     exit 1
 fi
 
-if [[ $persistent_policy == "mapper" ]]; then
-    unset persistent_policy
-elif [[ -n $persistent_policy && ! -d "/dev/disk/${persistent_policy}" ]]; then
-    dwarn "Invalid persistent policy, your system does not have a /dev/disk/${persistent_policy} directory."
-    unset persistent_policy
-fi
-
-if [[ $enhanced_cpio == "yes" ]]; then
-    enhanced_cpio="$dracutbasedir/dracut-cpio"
-    if [[ -x $enhanced_cpio ]]; then
-        # align based on statfs optimal transfer size
-        cpio_align=$(stat --file-system -c "%s" -- "$initdir")
-    else
-        dinfo "--enhanced-cpio ignored due to lack of dracut-cpio"
-        unset enhanced_cpio
-    fi
-else
-    unset enhanced_cpio
-fi
-
+# shellcheck disable=SC2154
 if [[ $no_kernel != yes ]] && ! [[ -d $srcmods ]]; then
-    dfatal "Cannot find module directory $srcmods"
-    dfatal "and --no-kernel was not specified"
+    printf "%s\n" "dracut: Cannot find module directory $srcmods" >&2
+    printf "%s\n" "dracut: and --no-kernel was not specified" >&2
     exit 1
 fi
 
@@ -1369,7 +1225,7 @@ omit_drivers_corrected=""
 for d in $omit_drivers; do
     [[ " $drivers $add_drivers " == *\ $d\ * ]] && continue
     [[ " $drivers $force_drivers " == *\ $d\ * ]] && continue
-    omit_drivers_corrected+="^$d$|"
+    omit_drivers_corrected+="$d|"
 done
 omit_drivers="${omit_drivers_corrected%|}"
 unset omit_drivers_corrected
@@ -1385,7 +1241,9 @@ dinfo "Executing: $dracut_cmd ${dracut_args[*]}"
 
 [[ $do_list == yes ]] && {
     for mod in "$dracutbasedir"/modules.d/*; do
-        [[ -e $mod/module-setup.sh ]] || continue
+        [[ -d $mod ]] || continue
+        [[ -e $mod/install || -e $mod/installkernel || -e \
+        $mod/module-setup.sh ]] || continue
         printf "%s\n" "${mod##*/??}"
     done
     exit 0
@@ -1398,78 +1256,18 @@ esac
 
 abs_outfile=$(readlink -f "$outfile") && outfile="$abs_outfile"
 
-# Helper function to set global variables
-# set_global_var <pkg_config> <pkg_var[:exported_var]> <value[:check_file]> [<value[:check_file]>] ...
-set_global_var() {
-    local _pkgconfig="$1"
-    local _pkgvar="${2%:*}"
-    local _var="${2#*:}"
-    [[ -z ${!_var} || ! -d ${dracutsysrootdir}${!_var} ]] \
-        && export "$_var"="$(pkg-config "$_pkgconfig" --variable="$_pkgvar" 2> /dev/null)"
-    if [[ -z ${!_var} || ! -d ${dracutsysrootdir}${!_var} ]]; then
-        shift 2
-        if (($# == 1)); then
-            export "$_var"="$1"
-        else
-            local _val
-            for _val in "$@"; do
-                _check=${_val##*:}
-                _val=${_val%:*}
-                [[ -e ${dracutsysrootdir}${_check} ]] && export "$_var"="$_val"
-            done
-        fi
-    fi
-}
+[[ -d $dracutsysrootdir$systemdutildir ]] \
+    || systemdutildir=$(pkg-config systemd --variable=systemdutildir 2> /dev/null)
 
-# dbus global variables
-set_global_var "dbus" "dbus" "/usr/share/dbus-1"
-set_global_var "dbus" "dbusconfdir" "/etc/dbus-1"
-set_global_var "dbus" "dbusinterfaces" "${dbus}/interfaces"
-set_global_var "dbus" "dbusinterfacesconfdir" "${dbusconfdir}/interfaces"
-set_global_var "dbus" "dbusservices" "${dbus}/services"
-set_global_var "dbus" "dbusservicesconfdir" "${dbusconfdir}/services"
-set_global_var "dbus" "dbussession" "${dbus}/session.d"
-set_global_var "dbus" "dbussessionconfdir" "${dbusconfdir}/session.d"
-set_global_var "dbus" "dbussystem" "${dbus}/system.d"
-set_global_var "dbus" "dbussystemconfdir" "${dbusconfdir}/system.d"
-set_global_var "dbus" "dbussystemservices" "${dbus}/system-services"
-set_global_var "dbus" "dbussystemservicesconfdir" "${dbusconfdir}/system-services"
+if ! [[ -d $dracutsysrootdir$systemdutildir ]]; then
+    [[ -e $dracutsysrootdir/lib/systemd/systemd-udevd ]] && systemdutildir=/lib/systemd
+    [[ -e $dracutsysrootdir/usr/lib/systemd/systemd-udevd ]] && systemdutildir=/usr/lib/systemd
+fi
 
-# udev global variables
-set_global_var "udev" "udevdir" "/lib/udev:/lib/udev/ata_id" "/usr/lib/udev:/usr/lib/udev/ata_id"
-set_global_var "udev" "udevconfdir" "/etc/udev"
-set_global_var "udev" "udevrulesdir" "${udevdir}/rules.d"
-set_global_var "udev" "udevrulesconfdir" "${udevconfdir}/rules.d"
+[[ -d $dracutsysrootdir$systemdutilconfdir ]] \
+    || systemdutilconfdir=$(pkg-config systemd --variable=systemdutilconfdir 2> /dev/null)
 
-# systemd global variables
-set_global_var "systemd" "prefix:systemdprefix" "/usr"
-set_global_var "systemd" "systemdutildir" "/lib/systemd:/lib/systemd/systemd-udevd" "/usr/lib/systemd:/usr/lib/systemd/systemd-udevd"
-set_global_var "systemd" "systemdutilconfdir" "/etc/systemd"
-set_global_var "systemd" "environment" "/usr/lib/environment.d"
-set_global_var "systemd" "environmentconfdir" "/etc/environment.d"
-set_global_var "systemd" "modulesload" "/usr/lib/modules-load.d"
-set_global_var "systemd" "modulesloadconfdir" "/etc/modules-load.d"
-set_global_var "systemd" "sysctld" "/usr/lib/sysctl.d"
-set_global_var "systemd" "sysctlconfdir" "/etc/sysctl.d"
-set_global_var "systemd" "systemdcatalog" "${systemdutildir}/catalog"
-set_global_var "systemd" "systemdnetwork" "${systemdutildir}/network"
-set_global_var "systemd" "systemdnetworkconfdir" "${systemdutilconfdir}/network"
-set_global_var "systemd" "systemdntpunits" "${systemdutildir}/ntp-units.d"
-set_global_var "systemd" "systemdntpunitsconfdir" "${systemdutilconfdir}/ntp-units.d"
-set_global_var "systemd" "systemdportable" "${systemdutildir}/portable"
-set_global_var "systemd" "systemdportableconfdir" "${systemdutilconfdir}/portable"
-set_global_var "systemd" "systemdsystemunitdir" "${systemdutildir}/system"
-set_global_var "systemd" "systemdsystemconfdir" "${systemdutilconfdir}/system"
-set_global_var "systemd" "systemduser" "${systemdutildir}/user"
-set_global_var "systemd" "systemduserconfdir" "${systemdutilconfdir}/user"
-set_global_var "systemd" "sysusers" "/usr/lib/sysusers.d"
-set_global_var "systemd" "sysusersconfdir" "/etc/sysusers.d"
-set_global_var "systemd" "tmpfilesdir" "/lib/tmpfiles.d" "/usr/lib/tmpfiles.d"
-set_global_var "systemd" "tmpfilesconfdir" "/etc/tmpfiles.d"
-
-# libkmod global variables
-set_global_var "libkmod" "depmodd" "/usr/lib/depmod.d"
-set_global_var "libkmod" "depmodconfdir" "/etc/depmod.d"
+[[ -d $dracutsysrootdir$systemdutilconfdir ]] || systemdutilconfdir=/etc/systemd
 
 if [[ $no_kernel != yes ]] && [[ -d $srcmods ]]; then
     if ! [[ -f $srcmods/modules.dep ]]; then
@@ -1478,6 +1276,23 @@ if [[ $no_kernel != yes ]] && [[ -d $srcmods ]]; then
             exit 1
         else
             dwarn "$srcmods/modules.dep is missing. Did you run depmod?"
+        fi
+    elif ! (command -v gzip &> /dev/null && command -v xz &> /dev/null); then
+        read -r _mod < "$srcmods"/modules.dep
+        _mod=${_mod%%:*}
+        if [[ -f $srcmods/"$_mod" ]]; then
+            # Check, if kernel modules are compressed, and if we can uncompress them
+            case "$_mod" in
+                *.ko.gz) kcompress=gzip ;;
+                *.ko.xz) kcompress=xz ;;
+                *.ko.zst) kcompress=zstd ;;
+            esac
+            if [[ $kcompress ]]; then
+                if ! command -v "$kcompress" &> /dev/null; then
+                    dfatal "Kernel modules are compressed with $kcompress, but $kcompress is not available."
+                    exit 1
+                fi
+            fi
         fi
     fi
 fi
@@ -1516,24 +1331,21 @@ if [[ ! $print_cmdline ]]; then
             exit 1
         fi
         unset EFI_MACHINE_TYPE_NAME
-        case "${DRACUT_ARCH:-$(uname -m)}" in
+        case $(uname -m) in
             x86_64)
                 EFI_MACHINE_TYPE_NAME=x64
                 ;;
             i?86)
                 EFI_MACHINE_TYPE_NAME=ia32
                 ;;
-            aarch64)
-                EFI_MACHINE_TYPE_NAME=aa64
-                ;;
             *)
-                dfatal "Architecture '${DRACUT_ARCH:-$(uname -m)}' not supported to create a UEFI executable"
+                dfatal "Architecture '$(uname -m)' not supported to create a UEFI executable"
                 exit 1
                 ;;
         esac
 
         if ! [[ -s $uefi_stub ]]; then
-            uefi_stub="$dracutsysrootdir${systemdprefix}/lib/systemd/boot/efi/linux${EFI_MACHINE_TYPE_NAME}.efi.stub"
+            uefi_stub="$dracutsysrootdir${systemdutildir}/boot/efi/linux${EFI_MACHINE_TYPE_NAME}.efi.stub"
         fi
 
         if ! [[ -s $uefi_stub ]]; then
@@ -1561,20 +1373,23 @@ fi
 
 if [[ $early_microcode == yes ]]; then
     if [[ $hostonly ]]; then
-        if [[ $(get_cpu_vendor) == "AMD" || $(get_cpu_vendor) == "Intel" ]]; then
-            check_kernel_config CONFIG_MICROCODE || unset early_microcode
+        if [[ $(get_cpu_vendor) == "AMD" ]]; then
+            check_kernel_config CONFIG_MICROCODE_AMD || unset early_microcode
+        elif [[ $(get_cpu_vendor) == "Intel" ]]; then
+            check_kernel_config CONFIG_MICROCODE_INTEL || unset early_microcode
         else
             unset early_microcode
         fi
     else
-        ! check_kernel_config CONFIG_MICROCODE \
+        ! check_kernel_config CONFIG_MICROCODE_AMD \
+            && ! check_kernel_config CONFIG_MICROCODE_INTEL \
             && unset early_microcode
     fi
     # Do not complain on non-x86 architectures as it makes no sense
-    case "${DRACUT_ARCH:-$(uname -m)}" in
+    case $(uname -m) in
         x86_64 | i?86)
             [[ $early_microcode != yes ]] \
-                && dwarn "Disabling early microcode, because kernel does not support it. CONFIG_MICROCODE!=y"
+                && dwarn "Disabling early microcode, because kernel does not support it. CONFIG_MICROCODE_[AMD|INTEL]!=y"
             ;;
         *) ;;
     esac
@@ -1619,10 +1434,6 @@ for line in "${fstab_lines[@]}"; do
             for i in $(btrfs_devs "$mp"); do
                 push_host_devs "$i"
             done
-        done
-    elif [[ $3 == zfs ]]; then
-        for mp in $(zfs_devs "$1"); do
-            push_host_devs "$mp"
         done
     fi
     push_host_devs "$dev"
@@ -1676,13 +1487,7 @@ if [[ $hostonly ]] && [[ $hostonly_default_device != "no" ]]; then
                 [[ $mp == "/" ]] && root_devs+=("$i")
                 push_host_devs "$i"
             done
-        elif [[ $(find_mp_fstype "$mp") == zfs ]]; then
-            for i in $(zfs_devs "$(findmnt -n -o SOURCE "$mp")"); do
-                [[ $mp == "/" ]] && root_devs+=("$i")
-                push_host_devs "$i"
-            done
         fi
-
     done
 
     # TODO - with sysroot, /proc/swaps is not relevant
@@ -1735,10 +1540,6 @@ if [[ $hostonly ]] && [[ $hostonly_default_device != "no" ]]; then
                 for i in $(btrfs_devs "$_m"); do
                     push_host_devs "$i"
                 done
-            elif [[ $_t == zfs ]]; then
-                for i in $(zfs_devs "$_d"); do
-                    push_host_devs "$i"
-                done
             fi
         done < "$dracutsysrootdir"/etc/fstab
     fi
@@ -1785,6 +1586,206 @@ for dev in "${!host_fs_types[@]}"; do
     fi
 done
 
+[[ -d $dracutsysrootdir$dbus ]] \
+    || dbus=$(pkg-config dbus --variable=dbus 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbus ]] || dbus=/usr/share/dbus-1
+
+[[ -d $dracutsysrootdir$dbusconfdir ]] \
+    || dbusconfdir=$(pkg-config dbus --variable=dbusconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbusconfdir ]] || dbusconfdir=/etc/dbus-1
+
+[[ -d $dracutsysrootdir$dbusinterfaces ]] \
+    || dbusinterfaces=$(pkg-config dbus --variable=dbusinterfaces 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbusinterfaces ]] || dbusinterfaces=${dbus}/interfaces
+
+[[ -d $dracutsysrootdir$dbusinterfacesconfdir ]] \
+    || dbusinterfacesconfdir=$(pkg-config dbus --variable=dbusinterfacesconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbusinterfacesconfdir ]] || dbusinterfacesconfdir=${dbusconfdir}/interfaces
+
+[[ -d $dracutsysrootdir$dbusservices ]] \
+    || dbusservices=$(pkg-config dbus --variable=dbusservices 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbusservices ]] || dbusservices=${dbus}/services
+
+[[ -d $dracutsysrootdir$dbusservicesconfdir ]] \
+    || dbusservicesconfdir=$(pkg-config dbus --variable=dbusservicesconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbusservicesconfdir ]] || dbusservicesconfdir=${dbusconfdir}/services
+
+[[ -d $dracutsysrootdir$dbussession ]] \
+    || dbussession=$(pkg-config dbus --variable=dbussession 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbussession ]] || dbussession=${dbus}/session.d
+
+[[ -d $dracutsysrootdir$dbussessionconfdir ]] \
+    || dbussessionconfdir=$(pkg-config dbus --variable=dbussessionconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbussessionconfdir ]] || dbussessionconfdir=${dbusconfdir}/session.d
+
+[[ -d $dracutsysrootdir$dbussystem ]] \
+    || dbussystem=$(pkg-config dbus --variable=dbussystem 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbussystem ]] || dbussystem=${dbus}/system.d
+
+[[ -d $dracutsysrootdir$dbussystemconfdir ]] \
+    || dbussystemconfdir=$(pkg-config dbus --variable=dbussystemconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbussystemconfdir ]] || dbussystemconfdir=${dbusconfdir}/system.d
+
+[[ -d $dracutsysrootdir$dbussystemservices ]] \
+    || dbussystemservices=$(pkg-config dbus --variable=dbussystemservices 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbussystemservices ]] || dbussystemservices=${dbus}/system-services
+
+[[ -d $dracutsysrootdir$dbussystemservicesconfdir ]] \
+    || dbussystemservicesconfdir=$(pkg-config dbus --variable=dbussystemservicesconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$dbussystemservicesconfdir ]] || dbussystemservicesconfdir=${dbusconfdir}/system-services
+
+[[ -d $dracutsysrootdir$udevdir ]] \
+    || udevdir="$(pkg-config udev --variable=udevdir 2> /dev/null)"
+if ! [[ -d $dracutsysrootdir$udevdir ]]; then
+    [[ -e $dracutsysrootdir/lib/udev/ata_id ]] && udevdir=/lib/udev
+    [[ -e $dracutsysrootdir/usr/lib/udev/ata_id ]] && udevdir=/usr/lib/udev
+fi
+
+[[ -d $dracutsysrootdir$udevconfdir ]] \
+    || udevconfdir=$(pkg-config udev --variable=udevconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$udevconfdir ]] || udevconfdir=/etc/udev
+
+[[ -d $dracutsysrootdir$udevrulesdir ]] \
+    || udevrulesdir=$(pkg-config udev --variable=udevrulesdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$udevrulesdir ]] || udevrulesdir=${udevdir}/rules.d
+
+[[ -d $dracutsysrootdir$udevrulesconfdir ]] \
+    || udevrulesconfdir=$(pkg-config udev --variable=udevrulesconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$udevrulesconfdir ]] || udevrulesconfdir=${udevconfdir}/rules.d
+
+[[ -d $dracutsysrootdir$sysctld ]] \
+    || sysctld=$(pkg-config systemd --variable=sysctld 2> /dev/null)
+
+[[ -d $dracutsysrootdir$sysctld ]] || sysctld=/usr/lib/sysctl.d
+
+[[ -d $dracutsysrootdir$sysctlconfdir ]] \
+    || sysctlconfdir=$(pkg-config systemd --variable=sysctlconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$sysctlconfdir ]] || sysctlconfdir=/etc/sysctl.d
+
+[[ -d $dracutsysrootdir$environment ]] \
+    || environment=$(pkg-config systemd --variable=environment 2> /dev/null)
+
+[[ -d $dracutsysrootdir$environment ]] || environment=/usr/lib/environment.d
+
+[[ -d $dracutsysrootdir$environmentconfdir ]] \
+    || environmentconfdir=$(pkg-config systemd --variable=environmentconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$environmentconfdir ]] || environmentconfdir=/etc/environment.d
+
+[[ -d $dracutsysrootdir$systemdcatalog ]] \
+    || systemdcatalog=$(pkg-config systemd --variable=systemdcatalog 2> /dev/null)
+
+[[ -d $dracutsysrootdir$systemdcatalog ]] || systemdcatalog=${systemdutildir}/catalog
+
+[[ -d $dracutsysrootdir$modulesload ]] \
+    || modulesload=$(pkg-config systemd --variable=modulesload 2> /dev/null)
+
+[[ -d $dracutsysrootdir$modulesload ]] || modulesload=/usr/lib/modules-load.d
+
+[[ -d $dracutsysrootdir$modulesloadconfdir ]] \
+    || modulesloadconfdir=$(pkg-config systemd --variable=modulesloadconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$modulesloadconfdir ]] || modulesloadconfdir=/etc/modules-load.d
+
+[[ -d $dracutsysrootdir$systemdnetwork ]] \
+    || systemdnetwork=$(pkg-config systemd --variable=systemdnetwork 2> /dev/null)
+
+[[ -d $dracutsysrootdir$systemdnetwork ]] || systemdnetwork=${systemdutildir}/network
+
+[[ -d $dracutsysrootdir$systemdnetworkconfdir ]] \
+    || systemdnetworkconfdir=$(pkg-config systemd --variable=systemdnetworkconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$systemdnetworkconfdir ]] || systemdnetworkconfdir=${systemdsystemconfdir}/network
+
+[[ -d $dracutsysrootdir$systemdntpunits ]] \
+    || systemdntpunits=$(pkg-config systemd --variable=systemdntpunits 2> /dev/null)
+
+[[ -d $dracutsysrootdir$systemdntpunits ]] || systemdntpunits=${systemdutildir}/ntp-units.d
+
+[[ -d $dracutsysrootdir$systemdntpunitsconfdir ]] \
+    || systemdntpunitsconfdir=$(pkg-config systemd --variable=systemdntpunitsconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$systemdntpunitsconfdir ]] || systemdntpunitsconfdir=${systemdsystemconfdir}/ntp-units.d
+
+[[ -d $dracutsysrootdir$systemdportable ]] \
+    || systemdportable=$(pkg-config systemd --variable=systemdportable 2> /dev/null)
+
+[[ -d $dracutsysrootdir$systemdportable ]] || systemdportable=${systemdutildir}/portable
+
+[[ -d $dracutsysrootdir$systemdportableconfdir ]] \
+    || systemdportableconfdir=$(pkg-config systemd --variable=systemdportableconfdir 2> /dev/null)
+
+[[ -d "$dracutsysrootdir$systemdportableconfdir" ]] || systemdportableconfdir=${systemdsystemconfdir}/portable
+
+[[ -d $dracutsysrootdir$systemdsystemunitdir ]] \
+    || systemdsystemunitdir=$(pkg-config systemd --variable=systemdsystemunitdir 2> /dev/null)
+
+[[ -d "$dracutsysrootdir$systemdsystemunitdir" ]] || systemdsystemunitdir=${systemdutildir}/system
+
+[[ -d $dracutsysrootdir$systemduser ]] \
+    || systemduser=$(pkg-config systemd --variable=systemduser 2> /dev/null)
+
+[[ -d $dracutsysrootdir$systemduser ]] || systemduser=${systemdutildir}/user
+
+[[ -d $dracutsysrootdir$systemduserconfdir ]] \
+    || systemduserconfdir=$(pkg-config systemd --variable=systemduserconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$systemduserconfdir ]] || systemduserconfdir=${systemdsystemconfdir}/user
+
+[[ -d $dracutsysrootdir$systemdsystemconfdir ]] \
+    || systemdsystemconfdir=$(pkg-config systemd --variable=systemdsystemconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$systemdsystemconfdir ]] || systemdsystemconfdir=/etc/systemd/system
+
+[[ -d $dracutsysrootdir$sysusers ]] \
+    || sysusers=$(pkg-config systemd --variable=sysusers 2> /dev/null)
+
+[[ -d $dracutsysrootdir$sysusers ]] || sysusers=/usr/lib/sysusers.d
+
+[[ -d $dracutsysrootdir$sysusersconfdir ]] \
+    || sysusersconfdir=$(pkg-config systemd --variable=sysusersconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$sysusersconfdir ]] || sysusersconfdir=/etc/sysusers.d
+
+[[ -d $dracutsysrootdir$tmpfilesdir ]] \
+    || tmpfilesdir=$(pkg-config systemd --variable=tmpfilesdir 2> /dev/null)
+
+if ! [[ -d $dracutsysrootdir$tmpfilesdir ]]; then
+    [[ -d $dracutsysrootdir/lib/tmpfiles.d ]] && tmpfilesdir=/lib/tmpfiles.d
+    [[ -d $dracutsysrootdir/usr/lib/tmpfiles.d ]] && tmpfilesdir=/usr/lib/tmpfiles.d
+fi
+
+[[ -d $dracutsysrootdir$tmpfilesconfdir ]] \
+    || tmpfilesconfdir=$(pkg-config systemd --variable=tmpfilesconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$tmpfilesconfdir ]] || tmpfilesconfdir=/etc/tmpfiles.d
+
+[[ -d $dracutsysrootdir$depmodd ]] \
+    || sysctld=$(pkg-config libkmod --variable=depmodd 2> /dev/null)
+
+[[ -d $dracutsysrootdir$depmodd ]] || depmodd=/usr/lib/depmod.d
+
+[[ -d $dracutsysrootdir$depmodconfdir ]] \
+    || sysctlconfdir=$(pkg-config libkmod --variable=depmodconfdir 2> /dev/null)
+
+[[ -d $dracutsysrootdir$depmodconfdir ]] || depmodconfdir=/etc/depmod.d
+
 export initdir dracutbasedir \
     dracutmodules force_add_dracutmodules add_dracutmodules omit_dracutmodules \
     mods_to_load \
@@ -1792,10 +1793,17 @@ export initdir dracutbasedir \
     omit_drivers mdadmconf lvmconf root_devs \
     use_fstab fstab_lines libdirs fscks nofscks ro_mnt \
     stdloglvl sysloglvl fileloglvl kmsgloglvl logfile \
-    host_fs_types host_devs swap_devs sshkey add_fstab \
-    DRACUT_VERSION \
-    prefix filesystems drivers \
-    hostonly_cmdline loginstall
+    debug host_fs_types host_devs swap_devs sshkey add_fstab \
+    DRACUT_VERSION udevdir udevconfdir udevrulesdir udevrulesconfdir \
+    prefix filesystems drivers dbus dbusconfdir dbusinterfaces \
+    dbusinterfacesconfdir dbusservices dbusservicesconfdir dbussession \
+    dbussessionconfdir dbussystem dbussystemconfdir dbussystemservices \
+    dbussystemservicesconfdir environment environmentconfdir modulesload \
+    modulesloadconfdir sysctl sysctlconfdir sysusers sysusersconfdir \
+    systemdutildir systemdutilconfdir systemdcatalog systemdntpunits \
+    systemdntpunitsconfdir systemdsystemunitdir systemdsystemconfdir \
+    hostonly_cmdline loginstall tmpfilesdir tmpfilesconfdir depmodd \
+    depmodconfdir
 
 mods_to_load=""
 # check all our modules to see if they should be sourced.
@@ -1878,11 +1886,11 @@ else
     done
 fi
 
-mkdir -p "${initdir}"/lib/dracut
-
 if [[ $kernel_only != yes ]]; then
     mkdir -p "${initdir}/etc/cmdline.d"
-    mkdir -m 0755 "${initdir}"/lib/dracut/hooks
+    # shellcheck disable=SC2174
+    mkdir -m 0755 -p "${initdir}"/lib "${initdir}"/lib/dracut "${initdir}"/lib/dracut/hooks
+    # shellcheck disable=SC2154
     for _d in $hookdirs; do
         # shellcheck disable=SC2174
         mkdir -m 0755 -p "${initdir}/lib/dracut/hooks/$_d"
@@ -1939,6 +1947,7 @@ done
 unset moddir
 
 for i in $modules_loaded; do
+    mkdir -p "$initdir"/lib/dracut
     printf "%s\n" "$i" >> "$initdir"/lib/dracut/modules.txt
 done
 
@@ -2035,16 +2044,9 @@ if [[ $kernel_only != yes ]]; then
 
     if [[ $DRACUT_RESOLVE_LAZY ]] && [[ $DRACUT_INSTALL ]]; then
         dinfo "*** Resolving executable dependencies ***"
-        # shellcheck disable=SC2086
         find "$initdir" -type f -perm /0111 -not -path '*.ko' -print0 \
-            | xargs -r -0 $DRACUT_INSTALL ${initdir:+-D "$initdir"} ${dracutsysrootdir:+-r "$dracutsysrootdir"} -R ${DRACUT_FIPS_MODE:+-f} --
-        # shellcheck disable=SC2181
-        if (($? == 0)); then
-            dinfo "*** Resolving executable dependencies done ***"
-        else
-            dfatal "Resolving executable dependencies failed"
-            exit 1
-        fi
+            | xargs -r -0 "$DRACUT_INSTALL" ${initdir:+-D "$initdir"} ${dracutsysrootdir:+-r "$dracutsysrootdir"} -R ${DRACUT_FIPS_MODE:+-f} --
+        dinfo "*** Resolving executable dependencies done ***"
     fi
 
     # Now we are done with lazy resolving, always install dependencies
@@ -2065,24 +2067,21 @@ for ((i = 0; i < ${#include_src[@]}; i++)); do
             # check for preexisting symlinks, so we can cope with the
             # symlinks to $prefix
             # Objectname is a file or a directory
-            reset_dotglob="$(shopt -p dotglob)"
-            shopt -q -s dotglob
             for objectname in "$src"/*; do
                 [[ -e $objectname || -L $objectname ]] || continue
-                if [[ -d $objectname ]] && [[ ! -L $objectname ]]; then
+                if [[ -d $objectname ]]; then
                     # objectname is a directory, let's compute the final directory name
-                    object_destdir=${destdir}/${objectname#"$src"/}
+                    object_destdir=${destdir}/${objectname#$src/}
                     if ! [[ -e $object_destdir ]]; then
                         # shellcheck disable=SC2174
                         mkdir -m 0755 -p "$object_destdir"
                         chmod --reference="$objectname" "$object_destdir"
                     fi
-                    $DRACUT_CP -t "$object_destdir" "$dracutsysrootdir$objectname"/.
+                    $DRACUT_CP -t "$object_destdir" "$dracutsysrootdir$objectname"/*
                 else
                     $DRACUT_CP -t "$destdir" "$dracutsysrootdir$objectname"
                 fi
             done
-            eval "$reset_dotglob"
         elif [[ -e $src ]]; then
             derror "$src is neither a directory nor a regular file"
         else
@@ -2093,7 +2092,7 @@ done
 
 if [[ $do_hardlink == yes ]] && command -v hardlink > /dev/null; then
     dinfo "*** Hardlinking files ***"
-    hardlink "$initdir" 2>&1 | ddebug
+    hardlink "$initdir" 2>&1 | dinfo
     dinfo "*** Hardlinking files done ***"
 fi
 
@@ -2110,13 +2109,6 @@ if [[ $do_strip == yes ]]; then
             do_strip=no
         fi
     done
-
-    if [[ $aggressive_strip == yes ]]; then
-        # `eu-strip` and `strip` both strips all unneeded parts by default
-        strip_args=(-p)
-    else
-        strip_args=(-g -p)
-    fi
 fi
 
 # cleanup empty ldconfig_paths directories
@@ -2236,7 +2228,16 @@ fi
 
 if [[ $kernel_only != yes ]]; then
     # make sure that library links are correct and up to date
-    build_ld_cache
+    for f in "$dracutsysrootdir"/etc/ld.so.conf "$dracutsysrootdir"/etc/ld.so.conf.d/*; do
+        [[ -f $f ]] && inst_simple "${f#$dracutsysrootdir}"
+    done
+    if ! $DRACUT_LDCONFIG -r "$initdir" -f /etc/ld.so.conf; then
+        if [[ $EUID == 0 ]]; then
+            derror "ldconfig exited ungracefully"
+        else
+            derror "ldconfig might need uid=0 (root) for chroot()"
+        fi
+    fi
 fi
 
 if dracut_module_included "squash"; then
@@ -2248,19 +2249,17 @@ if dracut_module_included "squash"; then
 fi
 
 if [[ $do_strip == yes ]] && ! [[ $DRACUT_FIPS_MODE ]]; then
-    # stripping files negates (dedup) benefits of using reflink
-    [[ -n $enhanced_cpio ]] && ddebug "strip is enabled alongside cpio reflink"
     dinfo "*** Stripping files ***"
     find "$initdir" -type f \
         -executable -not -path '*/lib/modules/*.ko' -print0 \
-        | xargs -r -0 $strip_cmd "${strip_args[@]}" 2> /dev/null
+        | xargs -r -0 $strip_cmd -g -p 2> /dev/null
 
     # strip kernel modules, but do not touch signed modules
     find "$initdir" -type f -path '*/lib/modules/*.ko' -print0 \
         | while read -r -d $'\0' f || [ -n "$f" ]; do
             SIG=$(tail -c 28 "$f" | tr -d '\000')
             [[ $SIG == '~Module signature appended~' ]] || { printf "%s\000" "$f"; }
-        done | xargs -r -0 $strip_cmd "${strip_args[@]}"
+        done | xargs -r -0 $strip_cmd -g -p
     dinfo "*** Stripping files done ***"
 fi
 
@@ -2268,11 +2267,11 @@ if dracut_module_included "squash"; then
     dinfo "*** Squashing the files inside the initramfs ***"
     declare squash_compress_arg
     # shellcheck disable=SC2086
-    if [[ $squash_compress ]]; then
-        if ! mksquashfs /dev/null "$DRACUT_TMPDIR"/.squash-test.img -no-progress -comp $squash_compress &> /dev/null; then
-            dwarn "mksquashfs doesn't support compressor '$squash_compress', failing back to default compressor."
+    if [[ $compress ]]; then
+        if ! mksquashfs /dev/null "$DRACUT_TMPDIR"/.squash-test.img -no-progress -comp $compress &> /dev/null; then
+            dwarn "mksquashfs doesn't support compressor '$compress', failing back to default compressor."
         else
-            squash_compress_arg="$squash_compress"
+            squash_compress_arg="$compress"
         fi
     fi
 
@@ -2280,7 +2279,7 @@ if dracut_module_included "squash"; then
     if ! mksquashfs "$squash_dir" "$squash_img" \
         -no-xattrs -no-exports -noappend -no-recovery -always-use-fragments \
         -no-progress ${squash_compress_arg:+-comp $squash_compress_arg} 1> /dev/null; then
-        dfatal "Failed making squash image"
+        dfatal "dracut: Failed making squash image"
         exit 1
     fi
 
@@ -2320,62 +2319,27 @@ if [[ $create_early_cpio == yes ]]; then
     fi
 
     # The microcode blob is _before_ the initramfs blob, not after
-    if [[ -n $enhanced_cpio ]]; then
-        if ! (
-            umask 077
-            cd "$early_cpio_dir/d"
-            find . -print0 | sort -z \
-                | $enhanced_cpio --null ${cpio_owner:+--owner "$cpio_owner"} \
-                    --mtime 0 --data-align "$cpio_align" --truncate-existing \
-                    "${DRACUT_TMPDIR}/initramfs.img"
-        ); then
-            dfatal "dracut-cpio: creation of $outfile failed"
-            exit 1
-        fi
-    else
-        if ! (
-            umask 077
-            cd "$early_cpio_dir/d"
-            find . -print0 | sort -z \
-                | cpio ${CPIO_REPRODUCIBLE:+--reproducible} --null \
-                    ${cpio_owner:+-R "$cpio_owner"} -H newc -o --quiet > "${DRACUT_TMPDIR}/initramfs.img"
-        ); then
-            dfatal "Creation of $outfile failed"
-            exit 1
-        fi
-    fi
-fi
-
-if check_kernel_config CONFIG_RD_ZSTD; then
-    DRACUT_KERNEL_RD_ZSTD=yes
-else
-    DRACUT_KERNEL_RD_ZSTD=
-fi
-
-if [[ $compress == $DRACUT_COMPRESS_ZSTD* && ! $DRACUT_KERNEL_RD_ZSTD ]]; then
-    dwarn "Kernel has no zstd support compiled in."
-    compress=
-fi
-
-if [[ $compress && $compress != cat ]]; then
-    if ! command -v "${compress%% *}" &> /dev/null; then
-        derror "Cannot execute compression command '$compress', falling back to default"
-        compress=
+    if ! (
+        umask 077
+        cd "$early_cpio_dir/d"
+        find . -print0 | sort -z \
+            | cpio ${CPIO_REPRODUCIBLE:+--reproducible} --null \
+                ${cpio_owner:+-R "$cpio_owner"} -H newc -o --quiet > "${DRACUT_TMPDIR}/initramfs.img"
+    ); then
+        dfatal "dracut: creation of $outfile failed"
+        exit 1
     fi
 fi
 
 if ! [[ $compress ]]; then
     # check all known compressors, if none specified
-    for i in $DRACUT_COMPRESS_PIGZ $DRACUT_COMPRESS_GZIP $DRACUT_COMPRESS_LZ4 $DRACUT_COMPRESS_LZOP $DRACUT_COMPRESS_ZSTD $DRACUT_COMPRESS_LZMA $DRACUT_COMPRESS_XZ $DRACUT_COMPRESS_LBZIP2 $DRACUT_COMPRESS_BZIP2 $DRACUT_COMPRESS_CAT; do
-        [[ $i != "$DRACUT_COMPRESS_ZSTD" || $DRACUT_KERNEL_RD_ZSTD ]] || continue
+    for i in $DRACUT_COMPRESS_PIGZ $DRACUT_COMPRESS_GZIP $DRACUT_COMPRESS_LZ4 $DRACUT_COMPRESS_LZOP $ $DRACUT_COMPRESS_ZSTD $DRACUT_COMPRESS_LZMA $DRACUT_COMPRESS_XZ $DRACUT_COMPRESS_LBZIP2 $OMPRESS_BZIP2 $DRACUT_COMPRESS_CAT; do
         command -v "$i" &> /dev/null || continue
         compress="$i"
         break
     done
     if [[ $compress == cat ]]; then
-        dwarn "No compression tool available. Initramfs image is going to be big."
-    else
-        dinfo "Using auto-determined compression method '$compress'"
+        printf "%s\n" "dracut: no compression tool available. Initramfs image is going to be big." >&2
     fi
 fi
 
@@ -2414,43 +2378,18 @@ case $compress in
         ;;
 esac
 
-if [[ -n $enhanced_cpio ]]; then
-    if [[ $compress == "cat" ]]; then
-        # dracut-cpio appends by default, so any ucode remains
-        cpio_outfile="${DRACUT_TMPDIR}/initramfs.img"
-    else
-        ddebug "$compress compression enabled alongside cpio reflink"
-        # dracut-cpio doesn't output to stdout, so stage for compression
-        cpio_outfile="${DRACUT_TMPDIR}/initramfs.img.uncompressed"
-    fi
-
-    if ! (
-        umask 077
-        cd "$initdir"
-        find . -print0 | sort -z \
-            | $enhanced_cpio --null ${cpio_owner:+--owner "$cpio_owner"} \
-                --mtime 0 --data-align "$cpio_align" "$cpio_outfile" || exit 1
-        [[ $compress == "cat" ]] && exit 0
-        $compress < "$cpio_outfile" >> "${DRACUT_TMPDIR}/initramfs.img" \
-            && rm "$cpio_outfile"
-    ); then
-        dfatal "dracut-cpio: creation of $outfile failed"
-        exit 1
-    fi
-    unset cpio_outfile
-else
-    if ! (
-        umask 077
-        cd "$initdir"
-        find . -print0 | sort -z \
-            | cpio ${CPIO_REPRODUCIBLE:+--reproducible} --null ${cpio_owner:+-R "$cpio_owner"} -H newc -o --quiet \
-            | $compress >> "${DRACUT_TMPDIR}/initramfs.img"
-    ); then
-        dfatal "Creation of $outfile failed"
-        exit 1
-    fi
+if ! (
+    umask 077
+    cd "$initdir"
+    find . -print0 | sort -z \
+        | cpio ${CPIO_REPRODUCIBLE:+--reproducible} --null ${cpio_owner:+-R "$cpio_owner"} -H newc -o --quiet \
+        | $compress >> "${DRACUT_TMPDIR}/initramfs.img"
+); then
+    dfatal "dracut: creation of $outfile failed"
+    exit 1
 fi
 
+# shellcheck disable=SC2154
 if ((maxloglvl >= 5)) && ((verbosity_mod_l >= 0)); then
     if [[ $allowlocal ]]; then
         "$dracutbasedir/lsinitrd.sh" "${DRACUT_TMPDIR}/initramfs.img" | ddebug
@@ -2461,132 +2400,53 @@ fi
 
 umask 077
 
-SBAT_DEFAULT="sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md"
-sbat_out=$uefi_outdir/uki.sbat
-
-clean_sbat_string() {
-    local inp=$1
-    local temp=$uefi_outdir/temp.sbat
-    sed "/${SBAT_DEFAULT//\//\\/}/d" "$inp" > "$temp"
-    [[ -s $temp ]] && cat "$temp" >> "$sbat_out"
-    rm "$temp"
-}
-
-get_sbat_string() {
-    local inp=$1
-    local out=$uefi_outdir/$2
-    objcopy -O binary --only-section=.sbat "$inp" "$out"
-    clean_sbat_string "$out"
-}
-
 if [[ $uefi == yes ]]; then
     if [[ $kernel_cmdline ]]; then
         echo -n "$kernel_cmdline" > "$uefi_outdir/cmdline.txt"
-    elif [[ $hostonly_cmdline == yes ]]; then
-        if [ -d "$initdir/etc/cmdline.d" ]; then
-            for conf in "$initdir"/etc/cmdline.d/*.conf; do
-                [ -e "$conf" ] || continue
-                printf "%s " "$(< "$conf")" >> "$uefi_outdir/cmdline.txt"
-            done
-        elif [ -e "/proc/cmdline" ]; then
-            printf "%s " "$(< "/proc/cmdline")" > "$uefi_outdir/cmdline.txt"
-        fi
+    elif [[ $hostonly_cmdline == yes ]] && [ -d "$initdir/etc/cmdline.d" ]; then
+        for conf in "$initdir"/etc/cmdline.d/*.conf; do
+            [ -e "$conf" ] || continue
+            printf "%s " "$(< "$conf")" >> "$uefi_outdir/cmdline.txt"
+        done
     fi
 
-    offs=$(objdump -h "$uefi_stub" 2> /dev/null | gawk 'NF==7 {size=strtonum("0x"$3);
-                offset=strtonum("0x"$4)} END {print size + offset}')
-    if [[ $offs -eq 0 ]]; then
-        dfatal "Failed to get the size of $uefi_stub to create UEFI image file"
-        exit 1
-    fi
-    align=$(pe_get_section_align "$uefi_stub")
-    if [[ $? -eq 1 ]]; then
-        dfatal "Failed to get the SectionAlignment of the stub PE header to create the UEFI image file"
-        exit 1
-    fi
-    offs=$((offs + "$align" - offs % "$align"))
-    [[ -s $dracutsysrootdir/usr/lib/os-release ]] && uefi_osrelease="$dracutsysrootdir/usr/lib/os-release"
-    [[ -s $dracutsysrootdir/etc/os-release ]] && uefi_osrelease="$dracutsysrootdir/etc/os-release"
-    [[ -s $uefi_osrelease ]] \
-        && uefi_osrelease_offs=${offs} \
-        && offs=$((offs + $(stat -Lc%s "$uefi_osrelease"))) \
-        && offs=$((offs + "$align" - offs % "$align"))
-
-    if [[ $kernel_cmdline ]] || [[ $hostonly_cmdline == yes && -e "${uefi_outdir}/cmdline.txt" ]]; then
+    if [[ $kernel_cmdline ]] || [[ $hostonly_cmdline == yes && -d "$initdir/etc/cmdline.d" ]]; then
         echo -ne "\x00" >> "$uefi_outdir/cmdline.txt"
         dinfo "Using UEFI kernel cmdline:"
         dinfo "$(tr -d '\000' < "$uefi_outdir/cmdline.txt")"
         uefi_cmdline="${uefi_outdir}/cmdline.txt"
-        uefi_cmdline_offs=${offs}
-        offs=$((offs + $(stat -Lc%s "$uefi_cmdline")))
-        offs=$((offs + "$align" - offs % "$align"))
     else
         unset uefi_cmdline
     fi
 
+    [[ -s $dracutsysrootdir/usr/lib/os-release ]] && uefi_osrelease="$dracutsysrootdir/usr/lib/os-release"
+    [[ -s $dracutsysrootdir/etc/os-release ]] && uefi_osrelease="$dracutsysrootdir/etc/os-release"
     if [[ -s ${dracutsysrootdir}${uefi_splash_image} ]]; then
         uefi_splash_image="${dracutsysrootdir}${uefi_splash_image}"
-        uefi_splash_offs=${offs}
-        offs=$((offs + $(stat -Lc%s "$uefi_splash_image")))
-        offs=$((offs + "$align" - offs % "$align"))
     else
         unset uefi_splash_image
     fi
 
-    echo "$SBAT_DEFAULT" > "$sbat_out"
-    if [[ -n $sbat ]]; then
-        echo "$sbat" | sed "/${SBAT_DEFAULT//\//\\/}/d" >> "$sbat_out"
-    fi
-    get_sbat_string "$kernel_image" kernel.sbat
-    get_sbat_string "$uefi_stub" stub.sbat
-
-    uefi_sbat_offs="${offs}"
-    offs=$((offs + $(stat -Lc%s "$sbat_out")))
-    offs=$((offs + "$align" - offs % "$align"))
-    uefi_linux_offs="${offs}"
-    offs=$((offs + $(stat -Lc%s "$kernel_image")))
-    offs=$((offs + "$align" - offs % "$align"))
-    uefi_initrd_offs="${offs}"
-
-    base_image=$(pe_get_image_base "$uefi_stub")
-    if [[ $? -eq 1 ]]; then
-        dfatal "Failed to get ImageBase data of $uefi_stub to create UEFI image file"
-        exit 1
-    fi
-
-    tmp_uefi_stub=$uefi_outdir/elf.stub
-    cp "$uefi_stub" "$tmp_uefi_stub"
-    objcopy --remove-section .sbat "$tmp_uefi_stub" &> /dev/null
-
     if objcopy \
-        ${uefi_osrelease:+--add-section .osrel="$uefi_osrelease" --change-section-vma .osrel=$(printf 0x%x "$uefi_osrelease_offs")} \
-        ${uefi_cmdline:+--add-section .cmdline="$uefi_cmdline" --change-section-vma .cmdline=$(printf 0x%x "$uefi_cmdline_offs")} \
-        ${uefi_splash_image:+--add-section .splash="$uefi_splash_image" --change-section-vma .splash=$(printf 0x%x "$uefi_splash_offs")} \
-        --add-section .sbat="$sbat_out" --change-section-vma .sbat="$(printf 0x%x "$uefi_sbat_offs")" \
-        --add-section .linux="$kernel_image" --change-section-vma .linux="$(printf 0x%x "$uefi_linux_offs")" \
-        --add-section .initrd="${DRACUT_TMPDIR}/initramfs.img" --change-section-vma .initrd="$(printf 0x%x "$uefi_initrd_offs")" \
-        --image-base="$(printf 0x%x "$base_image")" \
-        "$tmp_uefi_stub" "${uefi_outdir}/linux.efi"; then
+        ${uefi_osrelease:+--add-section .osrel="$uefi_osrelease" --change-section-vma .osrel=0x20000} \
+        ${uefi_cmdline:+--add-section .cmdline="$uefi_cmdline" --change-section-vma .cmdline=0x30000} \
+        ${uefi_splash_image:+--add-section .splash="$uefi_splash_image" --change-section-vma .splash=0x40000} \
+        --add-section .linux="$kernel_image" --change-section-vma .linux=0x2000000 \
+        --add-section .initrd="${DRACUT_TMPDIR}/initramfs.img" --change-section-vma .initrd=0x3000000 \
+        "$uefi_stub" "${uefi_outdir}/linux.efi"; then
         if [[ -n ${uefi_secureboot_key} && -n ${uefi_secureboot_cert} ]]; then
             if sbsign \
-                ${uefi_secureboot_engine:+--engine "$uefi_secureboot_engine"} \
                 --key "${uefi_secureboot_key}" \
                 --cert "${uefi_secureboot_cert}" \
-                --output "$outfile" "${uefi_outdir}/linux.efi" \
-                && sbverify --cert "${uefi_secureboot_cert}" "$outfile" > /dev/null 2>&1; then
+                --output "$outfile" "${uefi_outdir}/linux.efi"; then
                 dinfo "*** Creating signed UEFI image file '$outfile' done ***"
             else
-                rm -f -- "$outfile"
                 dfatal "*** Creating signed UEFI image file '$outfile' failed ***"
                 exit 1
             fi
         else
             if cp --reflink=auto "${uefi_outdir}/linux.efi" "$outfile"; then
                 dinfo "*** Creating UEFI image file '$outfile' done ***"
-            else
-                rm -f -- "$outfile"
-                dfatal "Creation of $outfile failed"
-                exit 1
             fi
         fi
     else
@@ -2599,10 +2459,12 @@ else
         dinfo "*** Creating initramfs image file '$outfile' done ***"
     else
         rm -f -- "$outfile"
-        dfatal "Creation of $outfile failed"
+        dfatal "dracut: creation of $outfile failed"
         exit 1
     fi
 fi
+
+command -v restorecon &> /dev/null && restorecon -- "$outfile"
 
 btrfs_uuid() {
     btrfs filesystem show "$1" | sed -n '1s/^.*uuid: //p'
@@ -2632,12 +2494,6 @@ freeze_ok_for_fstype() {
         msdos)
             return 1
             ;;
-        zfs)
-            return 1
-            ;;
-        tmpfs)
-            return 1
-            ;;
         btrfs)
             freeze_ok_for_btrfs "$outfile"
             ;;
@@ -2654,7 +2510,7 @@ freeze_ok_for_fstype() {
 # globally.  See e.g. https://github.com/ostreedev/ostree/commit/8642ef5ab3fec3ac8eb8f193054852f83a8bc4d0
 if [[ -d $dracutsysrootdir/run/systemd/system ]]; then
     if ! sync "$outfile" 2> /dev/null; then
-        dinfo "sync operation on newly created initramfs $outfile failed"
+        dinfo "dracut: sync operation on newly created initramfs $outfile failed"
         exit 1
     fi
 
@@ -2662,7 +2518,7 @@ if [[ -d $dracutsysrootdir/run/systemd/system ]]; then
     if [[ "$(stat -c %m -- "$outfile")" != "/" ]] && freeze_ok_for_fstype "$outfile"; then
         FSFROZEN="$(dirname "$outfile")"
         if ! (fsfreeze -f "${FSFROZEN}" 2> /dev/null && fsfreeze -u "${FSFROZEN}" 2> /dev/null); then
-            dwarn "Could not fsfreeze $(dirname "$outfile")"
+            dinfo "dracut: warning: could not fsfreeze $(dirname "$outfile")"
         fi
         unset FSFROZEN
     fi
